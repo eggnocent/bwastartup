@@ -71,6 +71,6 @@ func (h *UserHandler) Login(c *gin.Context) {
 	}
 
 	formatter := users.FormatUser(loggedinUser, "tokentokentoeken")
-	response := helper.APIResponse("Succesfuly login", http.StatusOK, "error", formatter)
-	c.JSON(http.StatusUnprocessableEntity, response)
+	response := helper.APIResponse("Succesfuly login", http.StatusOK, "success", formatter)
+	c.JSON(http.StatusOK, response)
 }

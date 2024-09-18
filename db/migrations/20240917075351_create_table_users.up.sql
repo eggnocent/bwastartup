@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255),
+    occupation VARCHAR(255),
+    email VARCHAR(255) UNIQUE,
+    password_hash VARCHAR(255),
+    avatar_file_name VARCHAR(255),
+    role VARCHAR(50),
+    token VARCHAR(255),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS transactions (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    campaign_id INT,
+    user_id INT,
+    amount INT,
+    status VARCHAR(50),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (campaign_id) REFERENCES campaigns(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);

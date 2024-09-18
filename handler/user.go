@@ -79,7 +79,6 @@ func (h *UserHandler) CheckEmailAvailability(c *gin.Context) {
 	var input users.CheckEmailInput
 
 	err := c.ShouldBindJSON(&input)
-
 	if err != nil {
 		errors := helper.FormatValidationError(err)
 		errorMessage := gin.H{"errors": errors}

@@ -61,13 +61,11 @@ func (s *service) Login(input LoginInput) (User, error) {
 func (s *service) IsEmailAvailable(input CheckEmailInput) (bool, error) {
 	email := input.Email
 	user, err := s.repository.FindByEmail(email)
-
 	if err != nil {
 		return false, err
 	}
-
-	if user.ID == 0 {
-		return true, nil
+	if user.ID != 0 {
+		return false, nil
 	}
 	return true, nil
 }

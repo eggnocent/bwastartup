@@ -92,7 +92,7 @@ func (s *service) GetUserByID(ID int) (User, error) {
 	if err != nil {
 		return user, err
 	}
-	if user.ID != 0 {
+	if user.ID == 0 {
 		return user, errors.New("No found user on with at ID")
 	}
 	return user, nil

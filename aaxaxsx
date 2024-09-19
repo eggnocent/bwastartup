@@ -1,0 +1,25 @@
+[1mdiff --git a/go.mod b/go.mod[m
+[1mindex 6acf70c..3c21a99 100644[m
+[1m--- a/go.mod[m
+[1m+++ b/go.mod[m
+[36m@@ -8,6 +8,7 @@[m [mrequire ([m
+ 	github.com/bytedance/sonic/loader v0.2.0 // indirect[m
+ 	github.com/cloudwego/base64x v0.1.4 // indirect[m
+ 	github.com/cloudwego/iasm v0.2.0 // indirect[m
+[32m+[m	[32mgithub.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect[m
+ 	github.com/gabriel-vasile/mimetype v1.4.5 // indirect[m
+ 	github.com/gin-contrib/sse v0.1.0 // indirect[m
+ 	github.com/gin-gonic/gin v1.10.0 // indirect[m
+[1mdiff --git a/go.sum b/go.sum[m
+[1mindex 5461b38..f20f919 100644[m
+[1m--- a/go.sum[m
+[1m+++ b/go.sum[m
+[36m@@ -11,6 +11,8 @@[m [mgithub.com/cloudwego/iasm v0.2.0 h1:1KNIy1I1H9hNNFEEH3DVnI4UujN+1zjpuk6gwHLTssg=[m
+ github.com/cloudwego/iasm v0.2.0/go.mod h1:8rXZaNYT2n95jn+zTI1sDr+IgcD2GVs0nlbbQPiEFhY=[m
+ github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=[m
+ github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=[m
+[32m+[m[32mgithub.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumCAMpl/TFQ4/5kLM=[m
+[32m+[m[32mgithub.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=[m
+ github.com/gabriel-vasile/mimetype v1.4.5 h1:J7wGKdGu33ocBOhGy0z653k/lFKLFDPJMG8Gql0kxn4=[m
+ github.com/gabriel-vasile/mimetype v1.4.5/go.mod h1:ibHel+/kbxn9x2407k1izTA1S81ku1z/DlgOW2QE0M4=[m
+ github.com/gin-contrib/sse v0.1.0 h1:Y/yl/+YNO8GZSjAhjMsSuLt29uWRFHdHYUb5lYOV9qE=[m

@@ -21,6 +21,8 @@ func main() {
 	userRepository := users.NewRepository(db)
 	userService := users.NewService(userRepository)
 
+	userService.SaveAvatar(1, "images/1-profile.png")
+
 	userHandler := handler.NewUserHandler(userService)
 
 	router := gin.Default()

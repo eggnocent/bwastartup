@@ -77,14 +77,15 @@ func (s *service) SaveAvatar(ID int, fileLocation string) (User, error) {
 	if err != nil {
 		return user, err
 	}
+
 	user.AvatarFileName = fileLocation
 
 	updatedUser, err := s.repository.Update(user)
 	if err != nil {
 		return updatedUser, err
 	}
-	return updatedUser, nil
 
+	return updatedUser, nil
 }
 
 func (s *service) GetUserByID(ID int) (User, error) {
@@ -92,8 +93,10 @@ func (s *service) GetUserByID(ID int) (User, error) {
 	if err != nil {
 		return user, err
 	}
+
 	if user.ID == 0 {
-		return user, errors.New("No found user on with at ID")
+		return user, errors.New("No user found on with that ID")
 	}
+
 	return user, nil
 }

@@ -2,14 +2,16 @@ package main
 
 import (
 	"bwastartup/auth"
+	"bwastartup/campaign"
 	"bwastartup/handler"
 	"bwastartup/helper"
 	"bwastartup/users"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
 
-	"github.com/gin-gonic/gin" // Perbarui import untuk versi v4
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -26,6 +28,21 @@ func main() {
 
 	// Buat instance userRepository, userService, dan authService
 	userRepository := users.NewRepository(db)
+	campaignRepository := campaign.NewRepository(db)
+
+	campaigns, err := campaignRepository.FindAll()
+	fmt.Println("debug")
+	fmt.Println("debug")
+	fmt.Println("debug")
+	fmt.Println(len(campaigns))
+	for _, campaign := range campaigns {
+		fmt.Println(campaign.Name)
+		if len(campaign.CampaignImages) > 0 {
+			fmt.Println(campaign.CampaignImages[0].FileName)
+		}
+
+	}
+
 	userService := users.NewService(userRepository)
 	authService := auth.NewService()
 

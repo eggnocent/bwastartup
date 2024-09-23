@@ -9,8 +9,9 @@ type Campaign struct {
 	ShortDescription string
 	Description      string
 	Perks            string
-	BakcerCount      string
-	CurrentAmount    string
+	BakcerCount      int
+	GoalAmount       int
+	CurrentAmount    int
 	Slug             string
 	CreatedAt        time.Time
 	UpdatedAt        time.Time

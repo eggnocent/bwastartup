@@ -6,7 +6,6 @@ import (
 	"bwastartup/handler"
 	"bwastartup/helper"
 	"bwastartup/users"
-	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -26,7 +25,7 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	// Buat instance userRepository, userService, dan authService
+	// instance
 	userRepository := users.NewRepository(db)
 	campaignRepository := campaign.NewRepository(db)
 
@@ -34,21 +33,17 @@ func main() {
 	campaignService := campaign.NewService(campaignRepository)
 	authService := auth.NewService()
 
-	campaigns, _ := campaignService.FindCampaigns(1)
-	fmt.Println(len(campaigns))
-
-	// Berikan userService dan authService ke handler
 	userHandler := handler.NewUserHandler(userService, authService)
-
-	// Inisialisasi router
+	campaignHandler := handler.NewCampaignHandler(campaignService)
 	router := gin.Default()
 
-	// Group API
 	api := router.Group("/api/v1")
 	api.POST("/users", userHandler.RegisterUser)
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/email_checker", userHandler.CheckEmailAvailability)
 	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar)
+
+	api.GET("/campaigns", campaignHandler.GetCampaign)
 
 	// Jalankan server
 	router.Run()

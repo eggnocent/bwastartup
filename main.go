@@ -45,6 +45,7 @@ func main() {
 	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar)
 
 	api.GET("/campaigns", campaignHandler.GetCampaign)
+	api.GET("/campaigns/:id", campaignHandler.GetCampaigns)
 
 	// Jalankan server
 	router.Run()

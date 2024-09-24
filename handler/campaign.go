@@ -4,6 +4,7 @@ import (
 	"bwastartup/campaign"
 	"bwastartup/helper"
 	"bwastartup/users"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -84,36 +85,49 @@ func (h *campaignHandler) CreateCampaign(c *gin.Context) {
 func (h *campaignHandler) UpdateCampaign(c *gin.Context) {
 	var inputID campaign.GetCampaignsDetailInput
 
-	// Ambil ID dari URL params, bukan dari body JSON
+	// Log untuk ID dari URI
+	log.Println("Handler: Parsing campaign ID from URI")
 	err := c.ShouldBindUri(&inputID)
 	if err != nil {
+		log.Println("Handler: Error parsing campaign ID from URI:", err)
 		errors := helper.FormatValidationError(err)
 		errorMessage := gin.H{"errors": errors}
-
 		response := helper.APIResponse("failed to update campaign", http.StatusBadRequest, "error", errorMessage)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
+	log.Println("Handler: Campaign ID from URI:", inputID.ID)
 
-	// Ambil data input dari body JSON
 	var inputData campaign.CreateCampaignInput
+
+	// Log untuk JSON yang diterima
+	log.Println("Handler: Parsing campaign update data from JSON")
 	err = c.ShouldBindJSON(&inputData)
 	if err != nil {
+		log.Println("Handler: Error parsing JSON:", err)
 		errors := helper.FormatValidationError(err)
 		errorMessage := gin.H{"errors": errors}
-
 		response := helper.APIResponse("failed to update campaign", http.StatusUnprocessableEntity, "error", errorMessage)
 		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
+	log.Println("Handler: Update data:", inputData)
 
+	// Ambil currentUser dari JWT
+	currentUser := c.MustGet("currentUser").(users.User)
+	log.Println("Handler: Current User ID:", currentUser.ID)
+	inputData.User = currentUser
+
+	// Panggil service untuk update campaign
 	updateCampaign, err := h.service.UpdateCampaign(inputID, inputData)
 	if err != nil {
+		log.Println("Handler: Error updating campaign:", err)
 		response := helper.APIResponse("failed to update campaign", http.StatusBadRequest, "error", nil)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
 
+	log.Println("Handler: Successfully updated campaign ID:", updateCampaign.ID)
 	response := helper.APIResponse("Success to update campaign", http.StatusOK, "Success", campaign.FormatCampaign(updateCampaign))
 	c.JSON(http.StatusOK, response)
 }

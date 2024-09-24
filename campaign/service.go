@@ -1,6 +1,7 @@
 package campaign
 
 import (
+	"errors"
 	"fmt"
 	"log"
 
@@ -71,6 +72,10 @@ func (s *service) UpdateCampaign(inputID GetCampaignsDetailInput, inputData Crea
 	if err != nil {
 		log.Println("Service: Error fetching campaign by ID:", err)
 		return campaign, err
+	}
+
+	if campaign.UserID != inputData.User.ID {
+		return campaign, errors.New("not allowed edit, your id not match id campaign, you not the owner!")
 	}
 
 	log.Println("Service: Updating campaign fields")

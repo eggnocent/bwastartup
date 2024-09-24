@@ -2,6 +2,7 @@ package campaign
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/gosimple/slug"
 )
@@ -10,7 +11,7 @@ type Service interface {
 	GetCampaigns(userID int) ([]Campaign, error)
 	GetCampaignsByID(input GetCampaignsDetailInput) (Campaign, error)
 	CreateCampaign(input CreateCampaignInput) (Campaign, error)
-	Update(inputID GetCampaignsDetailInput, inputData CreateCampaignInput) (Campaign, error)
+	UpdateCampaign(inputID GetCampaignsDetailInput, inputData CreateCampaignInput) (Campaign, error)
 }
 
 type service struct {
@@ -65,20 +66,26 @@ func (s *service) CreateCampaign(input CreateCampaignInput) (Campaign, error) {
 }
 
 func (s *service) UpdateCampaign(inputID GetCampaignsDetailInput, inputData CreateCampaignInput) (Campaign, error) {
+	log.Println("Service: Fetching campaign by ID:", inputID.ID)
 	campaign, err := s.repository.FindByID(inputID.ID)
 	if err != nil {
+		log.Println("Service: Error fetching campaign by ID:", err)
 		return campaign, err
 	}
+
+	log.Println("Service: Updating campaign fields")
 	campaign.Name = inputData.Name
 	campaign.ShortDescription = inputData.ShortDescription
 	campaign.Description = inputData.Description
 	campaign.Perks = inputData.Perks
 	campaign.GoalAmount = inputData.GoalAmount
 
+	log.Println("Service: Saving updated campaign")
 	updateCampaign, err := s.repository.Update(campaign)
 	if err != nil {
+		log.Println("Service: Error while saving updated campaign:", err)
 		return updateCampaign, err
 	}
+	log.Println("Service: Successfully updated campaign ID:", updateCampaign.ID)
 	return updateCampaign, nil
-
 }

@@ -47,8 +47,8 @@ func main() {
 	api.GET("/campaigns", campaignHandler.GetCampaign)
 	api.GET("/campaigns/:id", campaignHandler.GetCampaigns)
 	api.POST("/campaigns", authMiddleware(authService, userService), campaignHandler.CreateCampaign)
+	api.PUT("/campaigns/:id", authMiddleware(authService, userService), campaignHandler.UpdateCampaign)
 
-	// Jalankan server
 	router.Run()
 }
 

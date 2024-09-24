@@ -1,6 +1,8 @@
 package campaign
 
 import (
+	"log"
+
 	"gorm.io/gorm"
 )
 
@@ -59,9 +61,12 @@ func (r *repository) Save(campaign Campaign) (Campaign, error) {
 }
 
 func (r *repository) Update(campaign Campaign) (Campaign, error) {
+	log.Println("Repository: Starting Update process for campaign ID:", campaign.ID)
 	err := r.db.Save(&campaign).Error
 	if err != nil {
+		log.Println("Repository: Error while updating campaign:", err)
 		return campaign, err
 	}
+	log.Println("Repository: Successfully updated campaign ID:", campaign.ID)
 	return campaign, nil
 }

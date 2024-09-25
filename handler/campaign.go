@@ -148,8 +148,10 @@ func (h *campaignHandler) UploadImage(c *gin.Context) {
 		return
 	}
 
-	log.Println("Handler: Input CampaignID:", input.CampaignID)
-	log.Println("Handler: Input IsPrimary:", input.IsPrimary)
+	// Mendapatkan current user
+	currentUser := c.MustGet("currentUser").(users.User)
+	input.User = currentUser
+	userID := currentUser.ID
 
 	// Membaca file yang diupload
 	file, err := c.FormFile("file")
@@ -161,10 +163,6 @@ func (h *campaignHandler) UploadImage(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
-
-	// Mendapatkan current user
-	currentUser := c.MustGet("currentUser").(users.User)
-	userID := currentUser.ID
 
 	// Menyimpan file ke direktori
 	path := fmt.Sprintf("images/%d-%s", userID, file.Filename)

@@ -17,5 +17,6 @@ type CreateCampaignInput struct {
 
 type CreateCampaignImageInput struct {
 	CampaignID int  `form:"campaign_id" binding:"required"`
-	IsPrimary  bool `form:"is_primary" binding:"omitempty"` // Pastikan tipe bool di sini
+	IsPrimary  bool `form:"is_primary" binding:"omitempty"`
+	User       users.User
 }

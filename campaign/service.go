@@ -68,7 +68,6 @@ func (s *service) CreateCampaign(input CreateCampaignInput) (Campaign, error) {
 }
 
 func (s *service) UpdateCampaign(inputID GetCampaignsDetailInput, inputData CreateCampaignInput) (Campaign, error) {
-	log.Println("Service: Fetching campaign by ID:", inputID.ID)
 	campaign, err := s.repository.FindByID(inputID.ID)
 	if err != nil {
 		log.Println("Service: Error fetching campaign by ID:", err)
@@ -97,6 +96,16 @@ func (s *service) UpdateCampaign(inputID GetCampaignsDetailInput, inputData Crea
 }
 
 func (s *service) SaveCampaignImage(input CreateCampaignImageInput, fileLocation string) (CampaignImage, error) {
+	campaign, err := s.repository.FindByID(input.CampaignID)
+	if err != nil {
+		log.Println("Service: Error fetching campaign by ID:", err)
+		return CampaignImage{}, err
+	}
+
+	if campaign.UserID != input.User.ID {
+		return CampaignImage{}, errors.New("not allowed edit, your id not match id campaign, you not the owner!")
+	}
+
 	isPrimary := 0
 	if input.IsPrimary {
 		isPrimary = 1

@@ -131,11 +131,15 @@ func (h *campaignHandler) UpdateCampaign(c *gin.Context) {
 }
 
 func (h *campaignHandler) UploadImage(c *gin.Context) {
+	log.Println("Handler: UploadImage function reached")
+
+	// Membaca input campaign_id dan is_primary
 	var input campaign.CreateCampaignImageInput
 
+	// Memeriksa input yang dikirim dari form
 	err := c.ShouldBind(&input)
-
 	if err != nil {
+		log.Println("Handler: Error binding input", err) // Log jika input binding gagal
 		errors := helper.FormatValidationError(err)
 		errorMessage := gin.H{"errors": errors}
 
@@ -144,8 +148,13 @@ func (h *campaignHandler) UploadImage(c *gin.Context) {
 		return
 	}
 
+	log.Println("Handler: Input CampaignID:", input.CampaignID)
+	log.Println("Handler: Input IsPrimary:", input.IsPrimary)
+
+	// Membaca file yang diupload
 	file, err := c.FormFile("file")
 	if err != nil {
+		log.Println("Handler: Error getting the file", err) // Log jika file gagal didapat
 		data := gin.H{"is_uploaded": false}
 		response := helper.APIResponse("Failed to upload campaign image", http.StatusBadRequest, "error", data)
 
@@ -153,13 +162,15 @@ func (h *campaignHandler) UploadImage(c *gin.Context) {
 		return
 	}
 
+	// Mendapatkan current user
 	currentUser := c.MustGet("currentUser").(users.User)
 	userID := currentUser.ID
 
+	// Menyimpan file ke direktori
 	path := fmt.Sprintf("images/%d-%s", userID, file.Filename)
-
 	err = c.SaveUploadedFile(file, path)
 	if err != nil {
+		log.Println("Handler: Error saving the file", err) // Log jika file gagal disimpan
 		data := gin.H{"is_uploaded": false}
 		response := helper.APIResponse("Failed to upload campaign image", http.StatusBadRequest, "error", data)
 
@@ -167,8 +178,10 @@ func (h *campaignHandler) UploadImage(c *gin.Context) {
 		return
 	}
 
+	// Memanggil service untuk menyimpan campaign image
 	_, err = h.service.SaveCampaignImage(input, path)
 	if err != nil {
+		log.Println("Handler: Error saving campaign image", err) // Log jika terjadi error pada service
 		data := gin.H{"is_uploaded": false}
 		response := helper.APIResponse("Failed to upload campaign image", http.StatusBadRequest, "error", data)
 
@@ -176,9 +189,9 @@ func (h *campaignHandler) UploadImage(c *gin.Context) {
 		return
 	}
 
+	log.Println("Handler: Successfully uploaded the campaign image") // Log jika upload sukses
 	data := gin.H{"is_uploaded": true}
-	response := helper.APIResponse("Campaign successfuly uploaded", http.StatusOK, "success", data)
+	response := helper.APIResponse("Campaign image successfully uploaded", http.StatusOK, "success", data)
 
 	c.JSON(http.StatusOK, response)
-
 }

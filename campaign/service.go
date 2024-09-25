@@ -13,6 +13,7 @@ type Service interface {
 	GetCampaignsByID(input GetCampaignsDetailInput) (Campaign, error)
 	CreateCampaign(input CreateCampaignInput) (Campaign, error)
 	UpdateCampaign(inputID GetCampaignsDetailInput, inputData CreateCampaignInput) (Campaign, error)
+	SaveCampaignImage(input CreateCampaignImageInput, fileLocation string) (CampaignImage, error)
 }
 
 type service struct {
@@ -93,4 +94,27 @@ func (s *service) UpdateCampaign(inputID GetCampaignsDetailInput, inputData Crea
 	}
 	log.Println("Service: Successfully updated campaign ID:", updateCampaign.ID)
 	return updateCampaign, nil
+}
+
+func (s *service) SaveCampaignImage(input CreateCampaignImageInput, fileLocation string) (CampaignImage, error) {
+	isPrimary := 0
+	if input.IsPrimary {
+		isPrimary = 1
+		_, err := s.repository.MarkAllIMageAsNonPrimary(input.CampaignID)
+		if err != nil {
+			return CampaignImage{}, err
+		}
+	}
+
+	campaignImage := CampaignImage{}
+	campaignImage.CampaignID = input.CampaignID
+	campaignImage.IsPrimary = isPrimary
+	campaignImage.FileName = fileLocation
+
+	// Fungsi ini harus menyimpan campaignImage ke database, bukan memanggil MarkAllIMageAsNonPrimary
+	newCampaignImage, err := s.repository.CreateImage(campaignImage)
+	if err != nil {
+		return newCampaignImage, err
+	}
+	return newCampaignImage, nil
 }

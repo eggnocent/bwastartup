@@ -5,7 +5,6 @@ import (
 	"bwastartup/helper"
 	"bwastartup/users"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -129,7 +128,6 @@ func (h *userHandler) CheckEmailAvailability(c *gin.Context) {
 }
 
 func (h *userHandler) UploadAvatar(c *gin.Context) {
-	log.Println("masuk")
 	file, err := c.FormFile("avatar")
 	if err != nil {
 		data := gin.H{"is_uploaded": false}

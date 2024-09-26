@@ -3,7 +3,6 @@ package handler
 import (
 	"bwastartup/helper"
 	"bwastartup/transaction"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -29,13 +28,12 @@ func (h *transactionHandler) GetCampaignTransaction(c *gin.Context) {
 		return
 	}
 
-	log.Println("Handler: Received Campaign ID:", input.ID)
-	transaction, err := h.service.GetTransactionByCampaignID(input)
+	transactions, err := h.service.GetTransactionByCampaignID(input)
 	if err != nil {
 		response := helper.APIResponse("Failed to get transaction transaction", http.StatusBadRequest, "error", nil)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
-	response := helper.APIResponse("Transaction detail", http.StatusOK, "success", transaction)
+	response := helper.APIResponse("Transaction detail", http.StatusOK, "success", transaction.FormatCampaignTransactions(transactions))
 	c.JSON(http.StatusOK, response)
 }

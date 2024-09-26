@@ -18,7 +18,7 @@ func NewRepository(db *gorm.DB) *repository {
 
 func (r *repository) GetByCampaignID(campaignID int) ([]Transaction, error) {
 	var transaction []Transaction
-	err := r.db.Preload("User").Where("campaign_id = ?", campaignID).Find(&transaction).Error
+	err := r.db.Preload("User").Where("campaign_id = ?", campaignID).Order("id desc").Find(&transaction).Error
 	if err != nil {
 		return transaction, err
 	}

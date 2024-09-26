@@ -28,9 +28,11 @@ func main() {
 	// instance
 	userRepository := users.NewRepository(db)
 	campaignRepository := campaign.NewRepository(db)
+	//transactionRepository := transaction.NewRepository(db)
 
 	userService := users.NewService(userRepository)
 	campaignService := campaign.NewService(campaignRepository)
+
 	authService := auth.NewService()
 
 	userHandler := handler.NewUserHandler(userService, authService)

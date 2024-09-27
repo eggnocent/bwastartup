@@ -46,7 +46,6 @@ func (s *service) GetTransactionByCampaignID(input GetCampaignTransactionsInput)
 		}
 	}
 
-	// Fetch all transactions for the campaign
 	transactions, err := s.repository.GetByCampaignID(input.ID)
 	if err != nil {
 		return transactions, err

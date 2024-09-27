@@ -1,6 +1,8 @@
 package transaction
 
 import (
+	"log"
+
 	"gorm.io/gorm"
 )
 
@@ -28,9 +30,9 @@ func (r *repository) GetByCampaignID(campaignID int) ([]Transaction, error) {
 
 func (r *repository) GetByUserID(userID int) ([]Transaction, error) {
 	var transaction []Transaction
-
-	err := r.db.Preload("Campaign.CampaignImage", "campaign_image.is_primary = 1").Where("user_id", userID).Find(&transaction).Error
+	err := r.db.Preload("Campaign").Preload("User").Where("user_id = ?", userID).Order("id desc").Find(&transaction).Error
 	if err != nil {
+		log.Println("Repository: Error fetching transactions for user ID", userID, ":", err)
 		return transaction, err
 	}
 	return transaction, nil

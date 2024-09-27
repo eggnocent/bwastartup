@@ -30,3 +30,16 @@ func FormatCampaignTransactions(transactions []Transaction) []CampaignTransactio
 	}
 	return transactionFormatter
 }
+
+type UserTransactionFormatter struct {
+	ID         int               `json:"id"`
+	Amount     int               `json:"amount"`
+	Status     string            `json:"status"`
+	Created_at time.Time         `json:"created_at"`
+	Campaign   CampaignFormatter `json:"campaign"`
+}
+
+type CampaignFormatter struct {
+	Name     string `json:"name"`
+	ImageUrl string `json:"image_url"`
+}

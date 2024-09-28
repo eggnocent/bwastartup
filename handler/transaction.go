@@ -62,6 +62,12 @@ func (h *transactionHandler) GetUserTransaction(c *gin.Context) {
 	log.Println("Handler: Successfully fetched transactions for user ID:", userID)
 	formattedTransactions := transaction.FormatUserTransactions(transactions)
 
+	// Log hasil format untuk debugging
+	for _, ft := range formattedTransactions {
+		log.Printf("Handler: Formatted transaction ID: %d, Campaign: %s, Image URL: %s",
+			ft.ID, ft.Campaign.Name, ft.Campaign.ImageUrl)
+	}
+
 	// Mengirim response JSON dengan data transaksi yang sudah diformat
 	response := helper.APIResponse("User Transaction", http.StatusOK, "success", formattedTransactions)
 	c.JSON(http.StatusOK, response)

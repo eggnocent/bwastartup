@@ -61,5 +61,6 @@ func (s *service) GetTransactionByUserID(userID int) ([]Transaction, error) {
 		log.Println("Service: Error fetching transactions for user ID", userID, ":", err)
 		return transaction, err
 	}
+	log.Println("Service: Successfully fetched transactions for user ID:", userID)
 	return transaction, nil
 }

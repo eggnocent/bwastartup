@@ -3,7 +3,6 @@ package transaction
 import (
 	"bwastartup/campaign"
 	"errors"
-	"log"
 )
 
 type service struct {
@@ -56,11 +55,9 @@ func (s *service) GetTransactionByCampaignID(input GetCampaignTransactionsInput)
 }
 
 func (s *service) GetTransactionByUserID(userID int) ([]Transaction, error) {
-	transaction, err := s.repository.GetByUserID(userID)
+	transactions, err := s.repository.GetByUserID(userID)
 	if err != nil {
-		log.Println("Service: Error fetching transactions for user ID", userID, ":", err)
-		return transaction, err
+		return transactions, err
 	}
-	log.Println("Service: Successfully fetched transactions for user ID:", userID)
-	return transaction, nil
+	return transactions, nil
 }

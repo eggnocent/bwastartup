@@ -1,7 +1,6 @@
 package transaction
 
 import (
-	"log"
 	"time"
 )
 
@@ -58,16 +57,8 @@ func FormatUserTransaction(transaction Transaction) UserTransactionFormatter {
 	campaignFormatter.Name = transaction.Campaign.Name
 	campaignFormatter.ImageUrl = ""
 
-	// Log untuk melihat Campaign yang sedang diformat
-	log.Println("Formatter: Formatting campaign for transaction ID:", transaction.ID, "Campaign Name:", transaction.Campaign.Name)
-	log.Println("Formatter: Number of campaign images found:", len(transaction.Campaign.CampaignImages))
-
-	// Cek apakah ada gambar yang ditemukan
 	if len(transaction.Campaign.CampaignImages) > 0 {
 		campaignFormatter.ImageUrl = transaction.Campaign.CampaignImages[0].FileName
-		log.Println("Formatter: Found primary image for campaign", transaction.Campaign.Name, "Image URL:", campaignFormatter.ImageUrl)
-	} else {
-		log.Println("Formatter: No images found for campaign", transaction.Campaign.Name)
 	}
 
 	formatter.Campaign = campaignFormatter

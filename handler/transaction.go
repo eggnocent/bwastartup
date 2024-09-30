@@ -4,7 +4,6 @@ import (
 	"bwastartup/helper"
 	"bwastartup/transaction"
 	"bwastartup/users"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -43,32 +42,17 @@ func (h *transactionHandler) GetCampaignTransaction(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (h *transactionHandler) GetUserTransaction(c *gin.Context) {
-	// Mendapatkan user saat ini dari context
+func (h *transactionHandler) GetUserTransactions(c *gin.Context) {
 	currentUser := c.MustGet("currentUser").(users.User)
 	userID := currentUser.ID
-	log.Println("Handler: Fetching transactions for user ID:", userID)
 
-	// Memanggil service untuk mendapatkan transaksi berdasarkan user ID
 	transactions, err := h.service.GetTransactionByUserID(userID)
 	if err != nil {
-		log.Println("Handler: Error fetching transactions:", err)
-		response := helper.APIResponse("failed to get user transaction", http.StatusBadRequest, "error", nil)
+		response := helper.APIResponse("Failed to get user's transactions", http.StatusBadRequest, "error", nil)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
 
-	// Memformat transaksi yang berhasil didapatkan
-	log.Println("Handler: Successfully fetched transactions for user ID:", userID)
-	formattedTransactions := transaction.FormatUserTransactions(transactions)
-
-	// Log hasil format untuk debugging
-	for _, ft := range formattedTransactions {
-		log.Printf("Handler: Formatted transaction ID: %d, Campaign: %s, Image URL: %s",
-			ft.ID, ft.Campaign.Name, ft.Campaign.ImageUrl)
-	}
-
-	// Mengirim response JSON dengan data transaksi yang sudah diformat
-	response := helper.APIResponse("User Transaction", http.StatusOK, "success", formattedTransactions)
+	response := helper.APIResponse("User's transactions", http.StatusOK, "success", transaction.FormatUserTransactions(transactions))
 	c.JSON(http.StatusOK, response)
 }

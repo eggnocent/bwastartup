@@ -5,10 +5,10 @@ import (
 )
 
 type CampaignTransactionFormatter struct {
-	ID        int       `json:"id"`
-	Name      string    `json:"name"`
-	Amount    int       `json:"amount"`
-	CreatedAt time.Time `json:"created_at"`
+	ID        int    `json:"id"`
+	Name      string `json:"name"`
+	Amount    int    `json:"amount"`
+	CreatedAt string `json:"created_at"`
 }
 
 func FormatCampaignTransaction(transaction Transaction) CampaignTransactionFormatter {
@@ -16,7 +16,14 @@ func FormatCampaignTransaction(transaction Transaction) CampaignTransactionForma
 	formatter.ID = transaction.ID
 	formatter.Name = transaction.User.Name
 	formatter.Amount = transaction.Amount
-	formatter.CreatedAt = transaction.CreatedAt
+
+	location, err := time.LoadLocation("Asia/Jakarta")
+	if err != nil {
+		location = time.UTC
+	}
+
+	formatter.CreatedAt = transaction.CreatedAt.In(location).Format("02 January 2006, 03:04 PM")
+
 	return formatter
 }
 

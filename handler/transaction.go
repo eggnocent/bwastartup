@@ -4,6 +4,7 @@ import (
 	"bwastartup/helper"
 	"bwastartup/transaction"
 	"bwastartup/users"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -82,4 +83,29 @@ func (h *transactionHandler) CreateTransaction(c *gin.Context) {
 	}
 	response := helper.APIResponse("Success to create transaction", http.StatusOK, "Success", transaction.FormatTransaction(newTransaction))
 	c.JSON(http.StatusOK, response)
+}
+
+func (h *transactionHandler) GetNotification(c *gin.Context) {
+	log.Println("Received payment notification")
+
+	var input transaction.TransactionNotificationInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		log.Printf("Error binding JSON: %v", err)
+		response := helper.APIResponse("Failed to process notification", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	log.Printf("Payment notification data: %+v", input)
+
+	err := h.service.ProcessPayment(input)
+	if err != nil {
+		log.Printf("Error processing payment: %v", err)
+		response := helper.APIResponse("Failed to process notification", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	log.Println("Payment processed successfully")
+	c.JSON(http.StatusOK, input)
 }

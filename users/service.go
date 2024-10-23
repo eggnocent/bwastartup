@@ -95,7 +95,7 @@ func (s *service) GetUserByID(ID int) (User, error) {
 	}
 
 	if user.ID == 0 {
-		return user, errors.New("No user found on with that ID")
+		return user, errors.New("no user found on with that ID")
 	}
 
 	return user, nil
